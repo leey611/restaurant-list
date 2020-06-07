@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const exphbs = require('express-handlebars');
+
 const PORT = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
@@ -8,13 +9,17 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const usePassport = require('./config/passport');
 const routes = require('./routes');
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 require('./config/mongoose');
 
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', 'hbs');
 app.use(
   session({
-    secret: 'secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
   })
