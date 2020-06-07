@@ -4,6 +4,7 @@ module.exports = {
       next();
       return;
     }
+    req.flash('warning_msg', 'Please login');
     res.redirect('/users/login');
   }
 };
