@@ -13,18 +13,19 @@
 
 <body>
   <header>
-    <nav class="navbar font-weight-bolder">
+    <nav class="navbar font-weight-bolder" style="background-color: #8f8073;">
       <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="/" style="color: #fff;">
           <img src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/6227/restaurant-list-logo.png"
             width="30" height="30" class="d-inline-block align-top" alt="我的餐廳清單">
           {{#if user.name}}{{user.name}}'s {{/if}}Restaurant List
         </a>
         {{!-- <a href="/new" class="btn btn-light">Add</a> --}}
         {{#if isAuthenticated}}
-        <a href="/users/logout" class="btn btn-light">Logout</a>
+        <a href="/users/logout" class="btn btn-light" style="border:none; background-color: #461220; color: #fff"">Logout</a>
         {{else}}
-        <a href="/users/login" class="btn btn-light">Login</a>
+        <a href=" /users/login" class="btn btn-light"
+          style="border: none; background-color: #461220; color: #fff">Login</a>
         {{/if}}
       </div>
     </nav>

@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap');
+* {
+  font-family: 'Jost', sans-serif;
+}
+
+html body {
+  background-color: #eae0d5;
+}
+
 header {
   overflow: hidden;
 }
