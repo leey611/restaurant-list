@@ -6,7 +6,8 @@ const Restaurant = require('../../models/restaurant');
 
 //show all the restaurants
 router.get('/', (req, res) => {
-  Restaurant.find()
+  const userId = req.user._id;
+  Restaurant.find({ userId })
     .lean()
     .sort('_id')
     .then((item) => res.render('home', { item }))
@@ -44,9 +45,11 @@ router.get('/new', (req, res) => {
 
 //POST: add a new restaurant
 router.post('/new', (req, res) => {
+  const userId = req.user._id;
   if (!req.body.image) {
     req.body.image = `https://image.freepik.com/free-vector/elegant-restaurant-composition_23-2147855078.jpg`;
   }
+  req.body.userId = userId;
   const info = req.body;
   Restaurant.create(info)
     .then(res.redirect('/'))
