@@ -45,13 +45,17 @@ router.get('/new', (req, res) => {
 
 //POST: add a new restaurant
 router.post('/new', (req, res) => {
+  //console.log(req.user);
   const userId = req.user._id;
   if (!req.body.image) {
     req.body.image = `https://image.freepik.com/free-vector/elegant-restaurant-composition_23-2147855078.jpg`;
   }
-  req.body.userId = userId;
+
+  //req.body.userId = userId;
   const info = req.body;
-  Restaurant.create(info)
+  //console.log({ info, userId });
+  //console.log({ ...info, userId });
+  Restaurant.create({ ...info, userId })
     .then(res.redirect('/'))
     .catch((err) => console.log(err));
 });
