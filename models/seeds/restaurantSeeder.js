@@ -40,11 +40,11 @@ db.once('open', () => {
           const userId = createdUser._id;
           if (i === 0) {
             restaurantData.results
-              .slice(0, 2)
+              .slice(0, 3)
               .map((item) => Restaurant.create({ ...item, userId }));
           } else if (i === 1) {
             restaurantData.results
-              .slice(3, 5)
+              .slice(3, 6)
               .map((item) => Restaurant.create({ ...item, userId }));
           }
         })
