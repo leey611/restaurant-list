@@ -20,84 +20,51 @@ const SEED_USERS = [
 ];
 
 db.once('open', () => {
-  SEED_USERS.forEach((user, i) => {
-    User.findOne({ email: user.email }).then((foundUser) => {
-      if (foundUser) {
-        console.log('user already exists');
-        return process.exit();
-      }
+  const promises = [createSeed(SEED_USERS[0], 0), createSeed(SEED_USERS[1], 3)];
 
-      bcrypt
-        .genSalt(10)
-        .then((salt) => bcrypt.hash(user.password, salt))
-        .then((hash) =>
-          User.create({
-            email: user.email,
-            password: hash
-          })
-        )
-        .then((createdUser) => {
-          const userId = createdUser._id;
-          if (i === 0) {
-            restaurantData.results
-              .slice(0, 3)
-              .map((item) => Restaurant.create({ ...item, userId }));
-          } else if (i === 1) {
-            restaurantData.results
-              .slice(3, 6)
-              .map((item) => Restaurant.create({ ...item, userId }));
-          }
-        })
-        .then(() => console.log('seeds created'))
-        .catch((err) => console.log(err));
-    });
-    // bcrypt
-    //   .genSalt(10)
-    //   .then((salt) => bcrypt.hash(user.password, salt))
-    //   .then((hash) =>
-    //     User.create({
-    //       email: user.email,
-    //       password: hash
-    //     })
-    //   )
-    //   .then((user) => {
-    //     const userId = user._id;
-    //     return Promise.all(
-    //       Array.from({ length: 3 }, (value, i) =>
-    //         Restaurant.create({
-    //           name: restaurantData.results[i].name,
-    //           name_en: restaurantData.results[i].name_en,
-    //           category: restaurantData.results[i].category,
-    //           image: restaurantData.results[i].image,
-    //           location: restaurantData.results[i].location,
-    //           phone: restaurantData.results[i].phone,
-    //           google_map: restaurantData.results[i].google_map,
-    //           google_map_iframe: restaurantData.results[i].google_map_iframe,
-    //           rating: restaurantData.results[i].rating,
-    //           description: restaurantData.results[i].description
-    //         })
-    //       )
-    //     );
-    //   })
-    //   .then(() => {
-    //     console.log('done');
-    //     process.exit();
-    //   });
-  });
+  Promise.all(promises)
+    .then(() => {
+      console.log('seed created');
+      process.exit();
+    })
+    .catch((err) => console.log(err));
 
-  // restaurantData.results.forEach((detail) => {
-  //   Restaurant.create({
-  //     name: detail.name,
-  //     name_en: detail.name_en,
-  //     category: detail.category,
-  //     image: detail.image,
-  //     location: detail.location,
-  //     phone: detail.phone,
-  //     google_map: detail.google_map,
-  //     google_map_iframe: detail.google_map_iframe,
-  //     rating: detail.rating,
-  //     description: detail.description
-  //   });
-  // });
-  console.log('Data has been created!');
+  //console.log('Data has been created!');
 });
+
+function createSeed(user, startFrom) {
+  return new Promise((resolve, reject) => {
+    bcrypt
+      .genSalt(10)
+      .then((salt) => bcrypt.hash(user.password, salt))
+      .then((hash) =>
+        User.create({
+          email: user.email,
+          password: hash
+        })
+      )
+      .then((createdUser) => {
+        const userId = createdUser._id;
+        resolve(
+          Promise.all(
+            Array.from({ length: 3 }, (value, i) => {
+              Restaurant.create({
+                name: restaurantData.results[i + startFrom].name,
+                name_en: restaurantData.results[i + startFrom].name_en,
+                category: restaurantData.results[i + startFrom].category,
+                rating: restaurantData.results[i + startFrom].rating,
+                image: restaurantData.results[i + startFrom].image,
+                location: restaurantData.results[i + startFrom].location,
+                google_map: restaurantData.results[i + startFrom].google_map,
+                google_map_iframe:
+                  restaurantData.results[i + startFrom].google_map_iframe,
+                phone: restaurantData.results[i + startFrom].phone,
+                description: restaurantData.results[i + startFrom].description,
+                userId
+              });
+            })
+          )
+        );
+      });
+  });
+}
