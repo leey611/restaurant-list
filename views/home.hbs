@@ -59,18 +59,58 @@
                   <a href="/restaurants/{{this._id}}/edit">
                     <i class="far fa-edit"></i>
                   </a>
-                  <form action="/restaurants/{{this._id}}?_method=delete" method="post">
-                    <button type="submit" class="btn btn-link m-0 p-0">
-                      <i class="far fa-trash-alt ml-3 ml-md-3 mr-md-3"></i>
-                    </button>
-                  </form>
+                  {{!-- <form action="/restaurants/{{this._id}}?_method=delete" method="post"> --}}
+                  <button onclick="confirmDelete('{{this._id}}')" type="submit" class="btn btn-link m-0 p-0">
+                    <i class="far fa-trash-alt ml-3 ml-md-3 mr-md-3"></i>
+                  </button>
+                  {{!-- </form> --}}
+                  <div class="dialogoverlay" id={{this._id}}>
+                    <div>
+                      <div>DELETE???</div>
+                      <form action="/restaurants/{{this._id}}?_method=delete" method="post">
+                        <button type="submit" id="yes">Yes</button>
+                      </form>
+                      <button onclick="no('{{this._id}}')" id="no">No</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
         </a>
         {{/each}}
       </div>
     </div>
   </div>
 </div>
+<style>
+  .dialogoverlay {
+    background-color: #fff;
+    opacity: 0.8;
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  .dialogoverlay>div {
+    display: flex;
+    opacity: 1;
+  }
+</style>
+<script>
+
+  function confirmDelete(id) {
+    document.getElementById(id).style.display = 'flex';
+    document.getElementById(id).style.justifyContent = 'center'
+    document.getElementById(id).style.alignItems = 'center'
+  }
+
+  function no(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+</script>
