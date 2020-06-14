@@ -45,10 +45,11 @@ function createSeed(user, startFrom) {
       )
       .then((createdUser) => {
         const userId = createdUser._id;
+        console.log(userId);
         resolve(
           Promise.all(
             Array.from({ length: 3 }, (value, i) => {
-              Restaurant.create({
+              return Restaurant.create({
                 name: restaurantData.results[i + startFrom].name,
                 name_en: restaurantData.results[i + startFrom].name_en,
                 category: restaurantData.results[i + startFrom].category,
@@ -64,6 +65,7 @@ function createSeed(user, startFrom) {
               });
             })
           )
+          //resolve('rest created');
         );
       });
   });
